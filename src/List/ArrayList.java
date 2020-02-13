@@ -4,14 +4,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayList<T> implements List<T> {
+public class ArrayList<T> extends List<T> {
 
     protected T[] Elements;
-    protected int Size;
 
     @SuppressWarnings("unchecked")
     public ArrayList(int InitialCapacity) {
-        if(InitialCapacity < 1) {
+        if (InitialCapacity < 1) {
             throw new IllegalArgumentException("The Initial Capacity must be greater than zero.");
         }
         this.Elements = (T[]) new Object[InitialCapacity];
@@ -23,16 +22,6 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean IsEmpty() {
-        return this.Size == 0;
-    }
-
-    @Override
-    public int Size() {
-        return this.Size;
-    }
-
-    @Override
     public T Get(int index) {
         this.CheckIndex(index);
         return this.Elements[index];
@@ -40,19 +29,18 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int IndexOf(T Element) {
-        for(int i = 0; i < this.Size; i++) {
-            if(this.Elements[i].equals(Element)) {
+        for (int i = 0; i < this.Size; i++) {
+            if (this.Elements[i].equals(Element)) {
                 return i;
             }
         }
         return -1;
     }
 
-
     @Override
     public int LastIndexOf(T Element) {
-        for(int i = this.Size-1; i >= 0; i--) {
-            if(this.Elements[i].equals(Element)) {
+        for (int i = this.Size - 1; i >= 0; i--) {
+            if (this.Elements[i].equals(Element)) {
                 return i;
             }
         }
@@ -71,32 +59,6 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean Remove(T Element) {
-        int index = this.IndexOf(Element);
-        if(index == -1) {
-            return false;
-        }else {
-            this.Remove(index);
-            return true;
-        }
-    }
-
-    @SafeVarargs
-    @Override
-    public final boolean RemoveAll(T ... Elements) {
-        boolean flag = true;
-        for(T e : Elements){
-            int index = this.IndexOf(e);
-            if(index == -1) {
-                flag = false;
-            }else {
-                this.Remove(index);
-            }
-        }
-        return flag;
-    }
-
-    @Override
     public void Clear() {
         this.Elements = null;
     }
@@ -104,10 +66,10 @@ public class ArrayList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void Add(int index, T Element) {
-        if(index < 0 || index > Size) {
-            throw new IndexOutOfBoundsException("Index = "+ index + "; Size = "+ this.Size);
+        if (index < 0 || index > Size) {
+            throw new IndexOutOfBoundsException("Index = " + index + "; Size = " + this.Size);
         }
-        if(this.Size == this.Elements.length) {
+        if (this.Size == this.Elements.length) {
             T[] old = this.Elements;
             this.Elements = (T[]) new Object[2 * this.Size];
             System.arraycopy(old, 0, this.Elements, 0, this.Size);
@@ -117,33 +79,6 @@ public class ArrayList<T> implements List<T> {
         }
         this.Elements[index] = Element;
         this.Size++;
-    }
-
-    @Override
-    public void Add(T Element) {
-        this.Add(this.Size, Element);
-    }
-
-    @SafeVarargs
-    @Override
-    public final void AddAll(T... Elements) {
-        for(T e : Elements){
-            this.Add(e);
-        }
-    }
-
-    @SafeVarargs
-    @Override
-    public final void AddAll(int index, T... Elements) {
-        int i = index;
-        for(T e : Elements){
-            this.Add(i++, e);
-        }
-    }
-
-    @Override
-    public boolean Contains(T Element) {
-        return this.IndexOf(Element) != -1;
     }
 
     @Override
@@ -159,33 +94,14 @@ public class ArrayList<T> implements List<T> {
         return e;
     }
 
-    @Override
-    public String ToString() {
-        StringBuilder s = new StringBuilder("[");
-        for(T x : this) {
-            s.append(x).append(", ");
-        }
-        if(this.Size > 0) {
-            s.setLength(s.length()-2);
-        }
-        s.append("]");
-        return new String(s);
-    }
-
     public void Sort() {
         Arrays.sort(this.Elements, 0, this.Size);
     }
 
-    protected void CheckIndex(int index) {
-        if(index < 0 || index >= this.Size) {
-            throw new IndexOutOfBoundsException("Index = "+ index + "; Size = "+ this.Size);
-        }
-    }
+    protected static class ArrayListIterator<E> implements Iterator<E> {
 
-    private class ArrayListIterator<E> implements Iterator<E>{
-
-        private ArrayList<E> list;
-        private int nextIndex;
+        protected ArrayList<E> list;
+        protected int nextIndex;
 
         public ArrayListIterator(ArrayList<E> theList) {
             this.list = theList;
@@ -199,9 +115,9 @@ public class ArrayList<T> implements List<T> {
 
         @Override
         public E next() {
-            if(this.nextIndex < this.list.Size) {
+            if (this.nextIndex < this.list.Size) {
                 return this.list.Elements[this.nextIndex++];
-            }else{
+            } else {
                 throw new NoSuchElementException("No next element");
             }
         }

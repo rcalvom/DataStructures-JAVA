@@ -1,4 +1,5 @@
 package List;
 
-public class SortedArrayList {
+public class SortedArrayList<T> extends ArrayList<T> {
+
 }
