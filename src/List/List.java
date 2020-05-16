@@ -1,10 +1,17 @@
 package List;
 
+/**
+ * Linear data structure: List.
+ * @param <T> This describes the data type in the list.
+ */
 public abstract class List<T> implements IList<T> {
+    /**
+     * Number of elements in the list.
+     */
     protected int Size;
 
     @Override
-    public boolean IsEmpty(){
+    public boolean IsEmpty() {
         return Size == 0;
     }
 
@@ -18,17 +25,17 @@ public abstract class List<T> implements IList<T> {
         this.Add(this.Size, Element);
     }
 
-    @SafeVarargs
+    @SuppressWarnings("unchecked")
     @Override
-    public final void AddAll(T... Elements) {
+    public void AddAll(T... Elements) {
         for (T e : Elements) {
             this.Add(e);
         }
     }
 
-    @SafeVarargs
+    @SuppressWarnings("unchecked")
     @Override
-    public final void AddAll(int index, T... Elements) {
+    public void AddAll(int index, T... Elements) {
         int i = index;
         for (T e : Elements) {
             this.Add(i++, e);
@@ -69,18 +76,18 @@ public abstract class List<T> implements IList<T> {
     @Override
     public String ToString() {
         StringBuilder s = new StringBuilder("[");
-        for(T x : this) {
+        for (T x : this) {
             s.append(x).append(", ");
         }
-        if(this.Size > 0) {
-            s.setLength(s.length()-2);
+        if (this.Size > 0) {
+            s.setLength(s.length() - 2);
         }
         s.append("]");
         return new String(s);
     }
 
     protected void CheckIndex(int index) {
-        if(index < 0 || index >= this.Size) {
+        if (index < 0 || index >= this.Size) {
             throw new IndexOutOfBoundsException("index = " + index + "; Size = " + this.Size);
         }
     }

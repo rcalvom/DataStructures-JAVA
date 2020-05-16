@@ -4,8 +4,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayList<T> extends List<T> {
-
+/**
+ * Implementation of list in an Array.
+ * @param <T> This describes the data type in the list.
+ */
+public class ArrayList<T extends Comparable<? super T>>extends List<T> {
+    /**
+     * This describes Array of objects in the list.
+     */
     protected T[] Elements;
 
     @SuppressWarnings("unchecked")
@@ -13,7 +19,7 @@ public class ArrayList<T> extends List<T> {
         if (InitialCapacity < 1) {
             throw new IllegalArgumentException("The Initial Capacity must be greater than zero.");
         }
-        this.Elements = (T[]) new Object[InitialCapacity];
+        this.Elements = (T[]) new Comparable[InitialCapacity];
         this.Size = 0;
     }
 
@@ -59,6 +65,20 @@ public class ArrayList<T> extends List<T> {
     }
 
     @Override
+    public boolean Remove(T Element) {
+        for (int index = 0; index < this.Size; index++) {
+            if (this.Elements[index].equals(Element)) {
+                if (this.Size - index + 1 >= 0) {
+                    System.arraycopy(this.Elements, index + 1, this.Elements, index + 1 - 1, this.Size - index + 1);
+                }
+                this.Elements[--this.Size] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void Clear() {
         this.Elements = null;
     }
@@ -66,12 +86,12 @@ public class ArrayList<T> extends List<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void Add(int index, T Element) {
-        if (index < 0 || index > Size) {
+        if (index < 0 || index > this.Size) {
             throw new IndexOutOfBoundsException("Index = " + index + "; Size = " + this.Size);
         }
         if (this.Size == this.Elements.length) {
             T[] old = this.Elements;
-            this.Elements = (T[]) new Object[2 * this.Size];
+            this.Elements = (T[]) new Comparable[2 * this.Size];
             System.arraycopy(old, 0, this.Elements, 0, this.Size);
         }
         if (this.Size - index >= 0) {
@@ -94,11 +114,18 @@ public class ArrayList<T> extends List<T> {
         return e;
     }
 
+    /**
+     * Sort the list.
+     */
     public void Sort() {
         Arrays.sort(this.Elements, 0, this.Size);
     }
 
-    protected static class ArrayListIterator<E> implements Iterator<E> {
+    /**
+     * Iterator to ArrayList class
+     * @param <E> This describes the data type in the list.
+     */
+    protected static class ArrayListIterator<E extends Comparable<? super E>> implements Iterator<E> {
 
         protected ArrayList<E> list;
         protected int nextIndex;

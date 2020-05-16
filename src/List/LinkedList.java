@@ -3,8 +3,16 @@ package List;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Implementation of List using linked nodes.
+ *
+ * @param <T> This describes the data type in the list.
+ */
 public class LinkedList<T> extends List<T> {
 
+    /**
+     * The first node in the list.
+     */
     protected ChainNode<T> Head;
 
     public LinkedList() {
@@ -64,6 +72,12 @@ public class LinkedList<T> extends List<T> {
         }
         this.Size--;
         return removedElement;
+    }
+
+    @Override
+    public boolean Remove(T Element) {
+        //TODO: implements.
+        return false;
     }
 
     @Override
